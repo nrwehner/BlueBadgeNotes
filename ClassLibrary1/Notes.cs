@@ -34,4 +34,8 @@ namespace ClassLibrary1
  * Database-first
  * 
  * Web.config -> connection string
+ * 
+ * using statements at top are just code used to prevent having to reference namespaces each time we reference their objects
+ * 
+ * dbContext is a snapshot of the database
  * */
