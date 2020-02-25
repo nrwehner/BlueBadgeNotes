@@ -14,5 +14,6 @@ namespace RestaurantRater.Models
         }
         public DbSet<Restaurant> Restaurants { get; set; }//creating a property of the dbcontext that is a 
         //database set containing instances of the Restaurant class
+        //dbcontext is like a staging area to send a bunch of changes to before saving to database
     }
 }
