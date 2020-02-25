@@ -15,6 +15,7 @@ namespace RestaurantRater.Controllers
         private readonly RestaurantDbContext _context = new RestaurantDbContext();
 
         // POST
+        [HttpPost]
         public async Task<IHttpActionResult> PostRestaurant(Restaurant restaurant)
         {
             if (ModelState.IsValid && restaurant!=null)
@@ -27,6 +28,7 @@ namespace RestaurantRater.Controllers
         }//as soon as we call this method for the first time, our database will be scaffolded out, up until then, all we have is a dbcontext(stagin area)
 
         //GET ALL
+        [HttpGet]
         public async Task<IHttpActionResult> GetAll()
         {
             List<Restaurant> restaurants = await _context.Restaurants.ToListAsync();
@@ -34,6 +36,7 @@ namespace RestaurantRater.Controllers
         }
 
         //GET BY ID
+        [HttpGet]
         public async Task<IHttpActionResult> GetById(int id)
         {
             Restaurant restaurant = await _context.Restaurants.FindAsync(id);
@@ -43,7 +46,7 @@ namespace RestaurantRater.Controllers
             }
             return Ok(restaurant);
         }
-        public async Task<IHttpActionResult> GetByDollarSigns(int dollarSigns)
+        /*public async Task<IHttpActionResult> GetByDollarSigns(int dollarSigns)
         {
             Restaurant restaurant = await _context.Restaurants.FindAsync(dollarSigns);
             if (restaurant is null)
@@ -51,9 +54,32 @@ namespace RestaurantRater.Controllers
                 return NotFound();
             }
             return Ok(restaurant);
-        }
+        }*/
 
         //PUT (Update)
+        [HttpPut]//with this, it showed up as a POST
+        public async Task<IHttpActionResult> UpdateRestaurant([FromUri]int id, [FromBody]Restaurant model)
+        {
+            if(ModelState.IsValid && model != null)
+            {
+            Restaurant entity = await _context.Restaurants.FindAsync(id);//entity is a name used to reference objects actually 
+                //in the database (we are using entity framework)
+            
+            if(entity != null)
+                {
+                    entity.Name = model.Name;
+                    entity.Rating = model.Rating;
+                    entity.Style = model.Style;
+                    entity.DollarSigns = model.DollarSigns;
+
+                    await _context.SaveChangesAsync();
+
+                    return Ok();
+                }
+                return NotFound();
+            }
+            return BadRequest(ModelState);
+        }
 
         //DELETE BY ID
     }
